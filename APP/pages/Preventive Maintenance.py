@@ -2,9 +2,12 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-EXCEL_PATH = "APP/pm_backend.xlsx"
-OPERATIONS_PATH = "APP/operations.xlsx"
+# 🔗 Google Sheet CSV links (replace these with your actual Google Sheet IDs)
+ASSET_SHEET_ID = "1wAyHAy1XdqR0DgVUaWMjpWuj2dCX2JiVZK51OZAkhI0"
+OPERATIONS_SHEET_ID = "1-x39S7oomlU4BSNZX9Q9g2MOQLCiRM5eox3QEPPs46s"
 
+EXCEL_URL = f"https://docs.google.com/spreadsheets/d/{ASSET_SHEET_ID}/export?format=csv"
+OPERATIONS_URL = f"https://docs.google.com/spreadsheets/d/{OPERATIONS_SHEET_ID}/export?format=csv"
 
 USER1_CREDENTIALS = {
     "user1": "pass1"
@@ -46,14 +49,14 @@ def user1_page():
 
     if st.session_state.selected_date:
         try:
-            df_assets = pd.read_excel(EXCEL_PATH)
-            df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
+            df_assets = pd.read_csv(EXCEL_URL)
+            df_assets['Date'] = pd.to_datetime(df_assets['Date'], errors='coerce').dt.date
             filtered_df = df_assets[df_assets['Date'] == st.session_state.selected_date]
 
             if not filtered_df.empty:
                 asset_options = filtered_df['Asset Number'].dropna().unique()
                 available_assets = [a for a in asset_options if a not in st.session_state.selected_assets]
-    
+
                 if available_assets:
                     selected_asset = st.selectbox("Select Asset", available_assets)
                     if st.button("➡️ Proceed"):
@@ -65,7 +68,7 @@ def user1_page():
             else:
                 st.warning("No assets found for the selected date.")
         except Exception as e:
-            st.error(f"Error reading asset file: {e}")
+            st.error(f"Error reading asset sheet: {e}")
     else:
         st.info("Please extract today's date to continue.")
 
@@ -73,7 +76,7 @@ def user1_page():
         st.markdown("---")
         st.subheader(f"🛠️ Operations for Asset: {st.session_state.selected_asset}")
         try:
-            df_ops = pd.read_excel(OPERATIONS_PATH)
+            df_ops = pd.read_csv(OPERATIONS_URL)
             operations = df_ops["Operation"].dropna().tolist()
 
             checked_ops = []
@@ -82,30 +85,11 @@ def user1_page():
                     checked_ops.append(op)
 
             if st.button("✅ Submit"):
-                if checked_ops:
-                    try:
-                        df_assets = pd.read_excel(EXCEL_PATH)
-                        df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
+                st.warning("✋ This version uses Google Sheets in read-only mode. To update the sheet, you'll need Google Sheets API integration with credentials.")
+                st.write("These operations would be submitted:", checked_ops)
 
-                        mask = (
-                            (df_assets['Date'] == st.session_state.selected_date) &
-                            (df_assets['Asset Number'] == st.session_state.selected_asset)
-                        )
-
-                        df_assets.loc[mask, 'Operations'] = ', '.join(checked_ops)
-                        df_assets.loc[mask, 'Remarks'] = "Done"
-
-                        df_assets.to_excel(EXCEL_PATH, index=False)
-                        st.success(f"✅ Operations submitted for {st.session_state.selected_asset}.")
-                        st.write("Checked operations:", checked_ops)
-                        st.session_state.show_operations = False
-
-                    except Exception as e:
-                        st.error(f"Error updating backend file: {e}")
-                else:
-                    st.warning("Please select at least one operation before submitting.")
         except Exception as e:
-            st.error(f"Error reading operations file: {e}")
+            st.error(f"Error reading operations sheet: {e}")
 
 # Login state management
 if "user1_logged_in" not in st.session_state:
@@ -120,4 +104,3 @@ if st.session_state.user1_logged_in:
         user1_page()
 else:
     login()
-
