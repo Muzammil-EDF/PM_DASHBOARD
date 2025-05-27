@@ -49,20 +49,20 @@ def user1_page():
             df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
             filtered_df = df_assets[df_assets['Date'] == st.session_state.selected_date]
 
-            if not filtered_df.empty:
-                asset_options = filtered_df['Asset Number'].dropna().unique()
-                available_assets = [a for a in asset_options if a not in st.session_state.selected_assets]
+            # if not filtered_df.empty:
+            asset_options = filtered_df['Asset Number'].dropna().unique()
+            available_assets = [a for a in asset_options if a not in st.session_state.selected_assets]
 
-                if available_assets:
-                    selected_asset = st.selectbox("Select Asset", available_assets)
-                    if st.button("➡️ Proceed"):
-                        st.session_state.selected_asset = selected_asset
-                        st.session_state.show_operations = True
-                        st.session_state.selected_assets.append(selected_asset)
-                else:
-                    st.info("✅ All available assets for today have been selected.")
+            if available_assets:
+                selected_asset = st.selectbox("Select Asset", available_assets)
+                if st.button("➡️ Proceed"):
+                    st.session_state.selected_asset = selected_asset
+                    st.session_state.show_operations = True
+                    st.session_state.selected_assets.append(selected_asset)
             else:
-                st.warning("No assets found for the selected date.")
+                st.info("✅ All available assets for today have been selected.")
+            # else:
+            #     st.warning("No assets found for the selected date.")
         except Exception as e:
             st.error(f"Error reading asset file: {e}")
     else:
