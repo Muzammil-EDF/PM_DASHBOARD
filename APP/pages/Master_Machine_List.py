@@ -8,7 +8,7 @@ USER2_CREDENTIALS = {
 }
 
 def login():
-    st.title("🔐 User 2 Login")
+    st.title("🔐 Master Machine List Login")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
