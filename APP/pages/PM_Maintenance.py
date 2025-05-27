@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-EXCEL_PATH = "pm_backend.xlsx"
-OPERATIONS_PATH = "operations.xlsx"
+EXCEL_PATH = "APP/pm_backend.xlsx"
+OPERATIONS_PATH = "APP/operations.xlsx"
 
 USER1_CREDENTIALS = {
     "user1": "pass1"
