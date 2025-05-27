@@ -4,6 +4,7 @@ from datetime import datetime
 
 EXCEL_PATH = "APP/pm_backend.xlsx"
 OPERATIONS_PATH = "APP/operations.xlsx"
+GOOGLE_SHEETS_CSV = "https://docs.google.com/spreadsheets/d/1wAyHAy1XdqR0DgVUaWMjpWuj2dCX2JiVZK51OZAkhI0/export?format=csv&gid=0"
 
 USER1_CREDENTIALS = {
     "user1": "pass1"
@@ -45,7 +46,7 @@ def user1_page():
 
     if st.session_state.selected_date:
         try:
-            df_assets = pd.read_excel(EXCEL_PATH)
+            df_assets = pd.read_csv(GOOGLE_SHEETS_CSV)
             df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
             filtered_df = df_assets[df_assets['Date'] == st.session_state.selected_date]
 
