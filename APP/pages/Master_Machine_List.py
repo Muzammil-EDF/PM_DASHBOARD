@@ -26,7 +26,7 @@ def user2_page():
     try:
         df_master = pd.read_csv(GOOGLE_SHEET_CSV)
 
-        with st.expander("🔍 Filter Machine List", expanded=True):
+        with st.expander("🔍 Filter Machine List", expanded=False):
             search_values = {}
             for col in df_master.columns:
                 search_values[col] = st.text_input(f"Search in '{col}'")
