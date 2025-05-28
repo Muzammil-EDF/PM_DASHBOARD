@@ -82,7 +82,7 @@ def user1_page():
                     checked_ops.append(op)
 
             if st.button("✅ Submit"):
-                st.warning("✋ This version uses Google Sheets in read-only mode. To update the sheet, you'll need Google Sheets API integration with credentials.")
+
                 st.write("These operations would be submitted:", checked_ops)
 
         except Exception as e:
