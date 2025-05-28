@@ -3,12 +3,8 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-# 🔗 Google Sheet CSV links (replace these with your actual Google Sheet IDs)
-ASSET_SHEET_ID = "1wAyHAy1XdqR0DgVUaWMjpWuj2dCX2JiVZK51OZAkhI0"
-OPERATIONS_SHEET_ID = "1-x39S7oomlU4BSNZX9Q9g2MOQLCiRM5eox3QEPPs46s"
-
-EXCEL_URL = f"https://docs.google.com/spreadsheets/d/{ASSET_SHEET_ID}/export?format=csv"
-OPERATIONS_URL = f"https://docs.google.com/spreadsheets/d/{OPERATIONS_SHEET_ID}/export?format=csv"
+EXCEL_URL = "APP/pm_backend.xlsx"
+OPERATIONS_URL = "APP/operations.xlsx"
 
 USER1_CREDENTIALS = {
     "user1": "pass1"
@@ -50,7 +46,7 @@ def user1_page():
 
     if st.session_state.selected_date:
         try:
-            df_assets = pd.read_csv(EXCEL_URL)
+            df_assets = pd.read_excel(EXCEL_URL)
             df_assets['Date'] = pd.to_datetime(df_assets['Date'], errors='coerce').dt.date
             filtered_df = df_assets[df_assets['Date'] == st.session_state.selected_date]
 
@@ -77,7 +73,7 @@ def user1_page():
         st.markdown("---")
         st.subheader(f"🛠️ Operations for Asset: {st.session_state.selected_asset}")
         try:
-            df_ops = pd.read_csv(OPERATIONS_URL)
+            df_ops = pd.read_excel(OPERATIONS_URL)
             operations = df_ops["Operation"].dropna().tolist()
 
             checked_ops = []
