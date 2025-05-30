@@ -95,7 +95,7 @@ def user1_page():
                         df_assets.loc[mask, 'Operations'] = ', '.join(checked_ops)
                         df_assets.loc[mask, 'Remarks'] = "Done"
 
-                        df_assets.to_excel(EXCEL_PATH, index=False)
+                        df_assets.to_excel(EXCEL_URL, index=False)
                         st.success(f"✅ Operations submitted for {st.session_state.selected_asset}.")
                         st.write("Checked operations:", checked_ops)
                         st.session_state.show_operations = False
