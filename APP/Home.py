@@ -1,19 +1,15 @@
 import streamlit as st
 import sqlite3
+# Display all users after adding
 conn = sqlite3.connect("maintenance.db")
 c = conn.cursor()
-
-# Add a new user
-username = st.text_input("New Username")
-password = st.text_input("New Password", type="password")
-
-if st.button("Add User"):
-    c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-    conn.commit()
-    st.success("User added!")
-
+c.execute("SELECT * FROM users")
+rows = c.fetchall()
 conn.close()
 
+st.write("👤 Current Users in Database:")
+for row in rows:
+    st.write(f"ID: {row[0]}, Username: {row[1]}")
 
 st.set_page_config(page_title="Preventive Maintenance App", layout="centered")
 
