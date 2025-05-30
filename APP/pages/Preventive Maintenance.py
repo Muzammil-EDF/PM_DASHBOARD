@@ -3,8 +3,8 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 
-EXCEL_URL = "APP/pm_backend.xlsx"
-OPERATIONS_URL = "APP/operations.xlsx"
+EXCEL_URL = "pm_backend.xlsx"
+OPERATIONS_URL = "operations.xlsx"
 
 USER1_CREDENTIALS = {
     "user1": "pass1"
