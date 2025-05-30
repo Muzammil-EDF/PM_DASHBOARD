@@ -15,16 +15,8 @@ Use the sidebar to navigate to:
 Each user page is login-protected.
 """)
 
-# ========================================
-# 🔌 Setup SQLite Database
-# ========================================
-DB_FILENAME = "maintenance.db"
-
-# Get full path to save DB in the same folder as this script
-db_path = os.path.join(os.path.dirname(__file__), DB_FILENAME)
-
 # Connect to SQLite database (will auto-create file if it doesn't exist)
-conn = sqlite3.connect(db_path, check_same_thread=False)
+conn = sqlite3.connect('maintenance.db', check_same_thread=False)
 cursor = conn.cursor()
 
 # ========================================
