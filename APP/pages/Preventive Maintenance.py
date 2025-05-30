@@ -82,11 +82,30 @@ def user1_page():
                     checked_ops.append(op)
 
             if st.button("✅ Submit"):
+                if checked_ops:
+                    try:
+                        df_assets = pd.read_excel(EXCEL_PATH)
+                        df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
 
-                st.write("These operations would be submitted:", checked_ops)
+                        mask = (
+                            (df_assets['Date'] == st.session_state.selected_date) &
+                            (df_assets['Asset Number'] == st.session_state.selected_asset)
+                        )
 
+                        df_assets.loc[mask, 'Operations'] = ', '.join(checked_ops)
+                        df_assets.loc[mask, 'Remarks'] = "Done"
+
+                        df_assets.to_excel(EXCEL_PATH, index=False)
+                        st.success(f"✅ Operations submitted for {st.session_state.selected_asset}.")
+                        st.write("Checked operations:", checked_ops)
+                        st.session_state.show_operations = False
+
+                    except Exception as e:
+                        st.error(f"Error updating backend file: {e}")
+                else:
+                    st.warning("Please select at least one operation before submitting.")
         except Exception as e:
-            st.error(f"Error reading operations sheet: {e}")
+            st.error(f"Error reading operations file: {e}")
 
 # Login state management
 if "user1_logged_in" not in st.session_state:
