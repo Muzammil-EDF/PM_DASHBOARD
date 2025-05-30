@@ -2,6 +2,9 @@ import streamlit as st
 import sqlite3
 import os
 
+# ========================================
+# 🛠️ Page Setup
+# ========================================
 st.set_page_config(page_title="Preventive Maintenance App", layout="centered")
 st.title("🛠️ Digital Maintenance Management System")
 st.markdown("""
@@ -13,24 +16,22 @@ Each user page is login-protected.
 """)
 
 # ========================================
-# 🧱 Database Setup
+# 🔌 Setup SQLite Database
 # ========================================
+DB_FILENAME = "maintenance.db"
 
-DB_PATH = "maintenance.db"
+# Get full path to save DB in the same folder as this script
+db_path = os.path.join(os.path.dirname(__file__), DB_FILENAME)
 
-# Check if DB file exists
-if not os.path.exists(DB_PATH):
-    st.info("🔧 Creating new database file...")
-    
-# Connect to SQLite database (creates the file if it doesn't exist)
-conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+# Connect to SQLite database (will auto-create file if it doesn't exist)
+conn = sqlite3.connect(db_path, check_same_thread=False)
 cursor = conn.cursor()
 
 # ========================================
-# 🔨 Create Table
+# 🧱 Create Table (if not exists)
 # ========================================
 def create_table():
-    """Create the registrations table if it doesn't exist."""
+    """Create the registration table if it does not already exist."""
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS registrations (
             STATUS TEXT(50),
@@ -41,7 +42,7 @@ def create_table():
     conn.commit()
 
 # ========================================
-# ➕ Insert Entry
+# ➕ Insert Data into Table
 # ========================================
 def add_info(status, machine_type, category):
     """Insert user input into the database."""
@@ -51,25 +52,14 @@ def add_info(status, machine_type, category):
     st.success("✅ Entry added to the database!")
 
 # ========================================
-# 🧾 Show Entries
-# ========================================
-def view_entries():
-    """Fetch and display all entries from the database."""
-    st.subheader("📄 View Registered Machines")
-    cursor.execute("SELECT * FROM registrations")
-    records = cursor.fetchall()
-    if records:
-        st.dataframe(records, use_container_width=True)
-    else:
-        st.info("No entries found in the database.")
-
-# ========================================
-# 📝 Form UI
+# 📋 Main Streamlit Form
 # ========================================
 def form_creation():
     """Display the registration form and handle submission."""
     st.title("🧵 Sewing Machine Registration")
+
     st.write("Please fill out the fields below to register a machine:")
+
     with st.form("Sewing Machine Registration Form"):
         status = st.text_input('Enter Machine Status (Active, Maintenance, Dead, Ready)')
         machine_type = st.text_input('Enter Machine Type')
@@ -83,8 +73,23 @@ def form_creation():
             st.warning("⚠️ Please fill in all fields before submitting.")
 
 # ========================================
-# 🚀 Run App Functions
+# 📄 View Entries
+# ========================================
+def view_entries():
+    st.subheader("📄 View Registered Machines")
+
+    cursor.execute("SELECT * FROM registrations")
+    records = cursor.fetchall()
+
+    if records:
+        st.dataframe(records, use_container_width=True)
+    else:
+        st.info("No entries found in the database.")
+
+
+# ========================================
+# 🚀 Main App Execution
 # ========================================
 create_table()       # Ensure table exists
-form_creation()      # Display form
-view_entries()       # Show existing data
+form_creation()      # Display the form
+view_entries()       # Show all entries
