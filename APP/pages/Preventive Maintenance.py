@@ -84,7 +84,7 @@ def user1_page():
             if st.button("✅ Submit"):
                 if checked_ops:
                     try:
-                        df_assets = pd.read_excel(EXCEL_PATH)
+                        df_assets = pd.read_excel(EXCEL_URL)
                         df_assets['Date'] = pd.to_datetime(df_assets['Date']).dt.date
 
                         mask = (
