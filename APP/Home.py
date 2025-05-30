@@ -64,7 +64,19 @@ def form_creation():
             add_info(status, machine_type, category)
         else:
             st.warning("⚠️ Please fill in all fields before submitting.")
+def view_entries():
+    st.subheader("📄 View Registered Machines")
+
+    # Read data from database
+    cursor.execute("SELECT * FROM registrations")
+    records = cursor.fetchall()
+
+    if records:
+        st.dataframe(records, use_container_width=True)
+    else:
+        st.info("No entries found in the database.")
 
 
 create_table()       # Ensure table exists
 form_creation()      # Display form
+view_entries()
