@@ -1,5 +1,20 @@
 import streamlit as st
 import pandas as pd
+import sqlite3
+
+
+# Connect to the SQLite DB
+conn = sqlite3.connect("maintenance.db")
+c = conn.cursor()
+
+# Example query
+c.execute("SELECT * FROM users")
+rows = c.fetchall()
+
+# Display data
+st.write("Users in DB:", rows)
+
+conn.close()
 
 GOOGLE_SHEET_CSV = "https://docs.google.com/spreadsheets/d/11WppySSOEDKbcAAtqJjvnfU8vxcuQJPh5ZcTv_9e2I4/export?format=csv"
 
