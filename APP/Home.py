@@ -1,16 +1,16 @@
 import streamlit as st
 import sqlite3
-
-# Connect to the SQLite DB
 conn = sqlite3.connect("maintenance.db")
 c = conn.cursor()
 
-# Example query
-c.execute("SELECT * FROM users")
-rows = c.fetchall()
+# Add a new user
+username = st.text_input("New Username")
+password = st.text_input("New Password", type="password")
 
-# Display data
-st.write("Users in DB:", rows)
+if st.button("Add User"):
+    c.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+    conn.commit()
+    st.success("User added!")
 
 conn.close()
 
