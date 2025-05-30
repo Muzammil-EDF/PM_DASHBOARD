@@ -1,6 +1,15 @@
 import streamlit as st
-import streamlit as st
 import sqlite3
+
+st.set_page_config(page_title="Preventive Maintenance App", layout="centered")
+st.title("🛠️ Digital Maintenance Management System")
+st.markdown("""
+Use the sidebar to navigate to:
+- 👨‍🔧 Master Machine List
+- 📘 Preventive Maintenance
+
+Each user page is login-protected.
+""")
 
 # ========================================
 # 🔌 Connect to SQLite Database
@@ -59,14 +68,3 @@ def form_creation():
 
 create_table()       # Ensure table exists
 form_creation()      # Display form
-
-
-st.set_page_config(page_title="Preventive Maintenance App", layout="centered")
-st.title("🛠️ Digital Maintenance Management System")
-st.markdown("""
-Use the sidebar to navigate to:
-- 👨‍🔧 Master Machine List
-- 📘 Preventive Maintenance
-
-Each user page is login-protected.
-""")
